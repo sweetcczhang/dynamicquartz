@@ -1,7 +1,7 @@
 package cn.bupt.zcc.dynamicquartz.controller;
 
-import cn.bupt.zcc.dynamicquartz.job.QuartzJobFactory;
 import cn.bupt.zcc.dynamicquartz.model.ScheduleJob;
+import cn.bupt.zcc.dynamicquartz.service.SchedulerJobService;
 import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Created by 张城城 on 2018/5/31.
@@ -23,26 +23,48 @@ public class JobController {
     @Autowired
     private Scheduler scheduler;
 
+    @Autowired
+    private SchedulerJobService schedulerJobService;
+
     @RequestMapping("/index")
     public String index(HttpServletRequest request){
-
-
+        logger.info("[JobController] the method index is start......");
+        List<ScheduleJob> jobList = schedulerJobService.getAllScheduleJob();
+        request.setAttribute("jobs",jobList);
+        logger.info("[JobController] the method index is end......");
         return "index";
+    }
+
+    /**
+     *
+     * @return
+     */
+    @RequestMapping("/getAllJobs")
+    public Object getAllJobs(){
+        List<ScheduleJob> jobList = schedulerJobService.getAllScheduleJob();
+        return jobList;
+    }
+
+    /**
+     * 获取正在执行的任务列表
+     * @return
+     * @throws SchedulerException
+     */
+    @RequestMapping("/getRunJob")
+    public Object getAllRunningJob() throws SchedulerException{
+        List<ScheduleJob> jobList = schedulerJobService.getAllRunningJob();
+        return jobList;
     }
 
 
     @RequestMapping("/addJob")
-    private void addjob(@ModelAttribute ScheduleJob scheduleJob){
-
-        JobDetail jobDetail = JobBuilder.newJob(QuartzJobFactory.class).withIdentity(scheduleJob.getJobName(),scheduleJob.getJobGroup()).build();
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(scheduleJob.getCronExpression());
-        CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(scheduleJob.getJobName(),scheduleJob.getJobGroup())
-                .withSchedule(scheduleBuilder).build();
-        jobDetail.getJobDataMap().put("scheduleJob",scheduleJob);
+    public void addOrUpdateJob(@ModelAttribute ScheduleJob scheduleJob){
+        logger.info("[JobController] the method addOrUpdateJob is start path:/addJob, the param:{}", scheduleJob);
         try {
-            scheduler.scheduleJob(jobDetail,trigger);
-        } catch (SchedulerException e) {
+            schedulerJobService.saveOrUpdate(scheduleJob);
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 }

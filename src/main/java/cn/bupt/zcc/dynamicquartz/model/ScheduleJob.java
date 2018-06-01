@@ -1,33 +1,31 @@
 package cn.bupt.zcc.dynamicquartz.model;
 
-import java.io.Serializable;
+public class ScheduleJob {
+    private Integer id;
 
-/**
- * @program: dynamicquartz
- * @description: ${description}
- * @author: Zhang Chengcheng
- * @create: 2018-05-31 15:57
- **/
-public class ScheduleJob implements Serializable {
+    private String jobId;
 
-    private static final long serialVersionUID = 1L;
+    private String jobName;
 
-    private String jobId;   //任务Id
+    private String jobStatus;
 
-    private String jobName;  //任务的名称
+    private String jobGroup;
 
-    private String jobGroup;  //任务组
+    private String cronExpression;
 
-    private String jobStatus; //任务的状态
+    private String desc;
 
-    private String cronExpression;  //cron表达式
+    private String beanName;
 
-    private String desc;    //任务描述
+    private String methodName;
 
-    private String beanName;    //要执行任务bean的名称
+    public Integer getId() {
+        return id;
+    }
 
-    private String methodName;  //要执行任务的方法
-
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getJobId() {
         return jobId;
@@ -45,20 +43,20 @@ public class ScheduleJob implements Serializable {
         this.jobName = jobName;
     }
 
-    public String getJobGroup() {
-        return jobGroup;
-    }
-
-    public void setJobGroup(String jobGroup) {
-        this.jobGroup = jobGroup;
-    }
-
     public String getJobStatus() {
         return jobStatus;
     }
 
     public void setJobStatus(String jobStatus) {
         this.jobStatus = jobStatus;
+    }
+
+    public String getJobGroup() {
+        return jobGroup;
+    }
+
+    public void setJobGroup(String jobGroup) {
+        this.jobGroup = jobGroup;
     }
 
     public String getCronExpression() {

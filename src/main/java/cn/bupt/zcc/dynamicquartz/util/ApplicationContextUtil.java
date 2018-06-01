@@ -6,8 +6,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 /**
- * @program: dynamicquartz
- * @description: ${description}
+ *
  * @author: Zhang Chengcheng
  * @create: 2018-05-31 15:07
  **/
@@ -33,7 +32,7 @@ public class ApplicationContextUtil implements ApplicationContextAware {
     }
 
     /**
-     *
+     *根据bean的名称去寻找一个类的实例
      * @param name
      * @param <T>
      * @return
@@ -44,7 +43,18 @@ public class ApplicationContextUtil implements ApplicationContextAware {
     }
 
     /**
-     *
+     * 根据全限定类名去寻找一个spring管理的bean实例
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public static <T> T getBean(Class<T> clazz){
+
+        return  (T)applicationContext.getBean(clazz);
+    }
+
+    /**
+     *根据bean的名称和全限定类名去寻找一个类的实例
      * @param name
      * @param clazz
      * @param <T>

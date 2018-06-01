@@ -12,8 +12,10 @@ import java.lang.reflect.Method;
 
 /**
  * @program: dynamicquartz
- * @description: ${description}
+ *
  * @author: Zhang Chengcheng
+ *
+ *
  * @create: 2018-05-31 15:34
  **/
 @Service("quartzService")
@@ -27,8 +29,16 @@ public class QuartzServiceImpl implements QuartzService {
         Object object = ApplicationContextUtil.getBean(beanName);
         try {
             logger.info("[QuartzServiceImpl] 反射调beanName:{},methodName:{}法开始.........",beanName,methodName);
-            Method method = object.getClass().getMethod(methodName);
-            method.invoke(object);
+            if (beanName.contains("\\.")){
+                Class clazz = Class.forName(beanName);
+                Object cronJob =  ApplicationContextUtil.getBean(clazz);
+                Method method1 = clazz.getMethod(methodName);
+                method1.invoke(cronJob);
+            }else {
+                Method method = object.getClass().getMethod(methodName);
+                method.invoke(object);
+            }
+
         } catch (Exception e) {
             logger.error("[QuartzServiceImpl] method invoke error,beanName:{},methodName:{}",beanName,methodName);
             return;

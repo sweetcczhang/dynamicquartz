@@ -2,6 +2,7 @@ package cn.bupt.zcc.dynamicquartz.service.impl;
 
 import cn.bupt.zcc.dynamicquartz.job.QuartzJobFactory;
 import cn.bupt.zcc.dynamicquartz.model.ScheduleJob;
+import cn.bupt.zcc.dynamicquartz.service.ScheduleJobInService;
 import cn.bupt.zcc.dynamicquartz.service.SchedulerJobService;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
@@ -18,12 +19,15 @@ import java.util.Set;
 /**
  * Created by 张城城 on 2018/6/1.
  */
-@Service
+@Service("schedulerJobService")
 public class SchedulerJobServiceImpl implements SchedulerJobService {
 
     private static final Logger logger = LoggerFactory.getLogger(SchedulerJobServiceImpl.class);
     @Autowired
     private Scheduler scheduler;
+
+    @Autowired
+    private ScheduleJobInService scheduleJobInService;
 
     /**
      * 获取所有的任务
@@ -78,7 +82,9 @@ public class SchedulerJobServiceImpl implements SchedulerJobService {
      */
     @Override
     public void  saveOrUpdate(ScheduleJob scheduleJob) throws Exception{
-        if (StringUtils.isBlank(scheduleJob.getJobId())){
+        TriggerKey triggerKey = TriggerKey.triggerKey(scheduleJob.getJobName(),scheduleJob.getJobGroup());
+        CronTrigger cronTrigger = (CronTrigger) scheduler.getTrigger(triggerKey);
+        if (cronTrigger==null){
             addJob(scheduleJob);
         }else {
             updateJobCronSchedule(scheduleJob);
@@ -93,6 +99,7 @@ public class SchedulerJobServiceImpl implements SchedulerJobService {
      */
     public void pauseJob(String jobName, String jobGroup) throws SchedulerException{
         JobKey jobKey = JobKey.jobKey(jobName,jobGroup);
+
         scheduler.pauseJob(jobKey);
     }
 
@@ -104,6 +111,7 @@ public class SchedulerJobServiceImpl implements SchedulerJobService {
      */
     public void deleteJob(String jobName,String jobGroup) throws SchedulerException{
         JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
+        scheduleJobInService.deleteByJobNameAndJobGroup(jobName,jobGroup);
         scheduler.deleteJob(jobKey);
     }
 
@@ -129,18 +137,17 @@ public class SchedulerJobServiceImpl implements SchedulerJobService {
         if (StringUtils.isBlank(scheduleJob.getCronExpression())){
             throw new Exception("[SchedulerJobServiceImpl] CronExpression不能为空");
         }
-        TriggerKey triggerKey = TriggerKey.triggerKey(scheduleJob.getJobName(),scheduleJob.getJobGroup());
-        CronTrigger cronTrigger = (CronTrigger) scheduler.getTrigger(triggerKey);
-        if (cronTrigger!=null){
-            throw new Exception("job is already exist!");
-        }
+//        if (cronTrigger!=null){
+//            throw new Exception("job is already exist!");
+//        }
         JobDetail jobDetail = JobBuilder.newJob(QuartzJobFactory.class).withIdentity(scheduleJob.getJobName(),scheduleJob.getJobGroup())
                 .build();
         jobDetail.getJobDataMap().put("scheduleJob",scheduleJob);
         CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(scheduleJob.getCronExpression());
-        cronTrigger = TriggerBuilder.newTrigger().withIdentity(scheduleJob.getJobName(),scheduleJob.getJobGroup())
+        CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity(scheduleJob.getJobName(),scheduleJob.getJobGroup())
                 .withSchedule(cronScheduleBuilder).build();
         scheduler.scheduleJob(jobDetail,cronTrigger);
+        scheduleJobInService.insertSelective(scheduleJob);
     }
 
     /**
@@ -161,6 +168,7 @@ public class SchedulerJobServiceImpl implements SchedulerJobService {
         JobDetail jobDetail=scheduler.getJobDetail(jobKey);
         jobDetail.getJobDataMap().put("scheduleJob",scheduleJob);
         scheduler.rescheduleJob(triggerKey,cronTrigger);
+        scheduleJobInService.updateByPrimaryKey(scheduleJob);
 
     }
 

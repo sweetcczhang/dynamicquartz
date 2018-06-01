@@ -6,6 +6,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.stereotype.Service;
 
 /**
  * @program: dynamicquartz
@@ -13,6 +14,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
  * @author: Zhang Chengcheng
  * @create: 2018-05-31 14:38
  **/
+@Service("quartzJobFactory")
 public class QuartzJobFactory extends QuartzJobBean {
 
     @Autowired
