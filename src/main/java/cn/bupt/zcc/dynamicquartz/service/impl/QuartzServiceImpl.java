@@ -26,11 +26,14 @@ public class QuartzServiceImpl implements QuartzService {
     public void executeTask(String beanName, String methodName) {
         Object object = ApplicationContextUtil.getBean(beanName);
         try {
+            logger.info("[QuartzServiceImpl] 反射调beanName:{},methodName:{}法开始.........",beanName,methodName);
             Method method = object.getClass().getMethod(methodName);
             method.invoke(object);
         } catch (Exception e) {
-
+            logger.error("[QuartzServiceImpl] method invoke error,beanName:{},methodName:{}",beanName,methodName);
+            return;
         }
+        logger.info("[QuartzServiceImpl] 反射调beanName:{},methodName:{}法结束.........",beanName,methodName);
 
     }
 

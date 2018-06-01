@@ -6,7 +6,7 @@ package cn.bupt.zcc.dynamicquartz.service;
  * @author: Zhang Chengcheng
  * @create: 2018-05-31 16:12
  **/
-public class SchedulerJobService {
+public interface SchedulerJobService {
 
 
 

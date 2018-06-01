@@ -1,5 +1,6 @@
 package cn.bupt.zcc.dynamicquartz.job;
 
+import cn.bupt.zcc.dynamicquartz.model.ScheduleJob;
 import cn.bupt.zcc.dynamicquartz.service.QuartzService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -16,8 +17,11 @@ public class QuartzJobFactory extends QuartzJobBean {
 
     @Autowired
     QuartzService quartzService;
+
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-            Object object = jobExecutionContext.getMergedJobDataMap().get("");
+        ScheduleJob object = (ScheduleJob) jobExecutionContext.getMergedJobDataMap().get("scheduleJob");
+        quartzService.executeTask(object.getBeanName(),object.getMethodName());
+
     }
 }
