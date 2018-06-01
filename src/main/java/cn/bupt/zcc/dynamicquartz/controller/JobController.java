@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by 张城城 on 2018/5/31.
  */
@@ -20,6 +22,14 @@ public class JobController {
 
     @Autowired
     private Scheduler scheduler;
+
+    @RequestMapping("/index")
+    public String index(HttpServletRequest request){
+
+
+        return "index";
+    }
+
 
     @RequestMapping("/addJob")
     private void addjob(@ModelAttribute ScheduleJob scheduleJob){

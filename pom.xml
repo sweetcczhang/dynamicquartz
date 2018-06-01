@@ -25,10 +25,12 @@
     </properties>
 
     <dependencies>
+        <!--web相关的依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!--web相关依赖结束-->
         <!--数据库连接相关的依赖-->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -44,6 +46,7 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <!--数据库相关依赖结束-->
 
         <!-- Includes spring's support classes for quartz -->
         <dependency>
@@ -60,6 +63,12 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.1.9</version>
+        </dependency>
+        <!--添加工具类相关依赖-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
         </dependency>
 
         <dependency>
