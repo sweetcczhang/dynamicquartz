@@ -21,6 +21,14 @@ public interface SchedulerJobService {
 
     void saveOrUpdate(ScheduleJob scheduleJob) throws Exception;
 
+    public void pauseJob(String jobName, String jobGroup) throws SchedulerException;
+
+    public void deleteJob(String jobName,String jobGroup) throws SchedulerException;
+
+    public void runOneJob(String jobName, String jobGroup) throws SchedulerException;
+
+    public void resumeJob(String jobName, String jobGroup) throws SchedulerException;
+
 
 
 }

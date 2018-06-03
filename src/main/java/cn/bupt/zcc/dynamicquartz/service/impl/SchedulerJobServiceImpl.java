@@ -42,8 +42,7 @@ public class SchedulerJobServiceImpl implements SchedulerJobService {
             for (JobKey key : jobKeys){
                 List<? extends Trigger> triggers = scheduler.getTriggersOfJob(key);
                 for (Trigger trigger: triggers){
-                    ScheduleJob scheduleJob = new ScheduleJob();
-                    getScheduleJob(scheduleJob,scheduler,key,trigger);
+                    ScheduleJob scheduleJob = getScheduleJob(scheduler,key,trigger);
                     jobList.add(scheduleJob);
                 }
             }
@@ -51,7 +50,7 @@ public class SchedulerJobServiceImpl implements SchedulerJobService {
             logger.error("[SchedulerJobServiceImpl] get the jobKeys is error:{}",e);
             //e.printStackTrace();
         }
-        return null;
+        return jobList;
     }
 
     /**
@@ -68,8 +67,7 @@ public class SchedulerJobServiceImpl implements SchedulerJobService {
             JobDetail jobDetail = jobExecutionContext.getJobDetail();
             JobKey jobKey = jobDetail.getKey();
             Trigger trigger = jobExecutionContext.getTrigger();
-            ScheduleJob scheduleJob = new ScheduleJob();
-            getScheduleJob(scheduleJob,scheduler,jobKey,trigger);
+            ScheduleJob scheduleJob = getScheduleJob(scheduler,jobKey,trigger);
             jobList.add(scheduleJob);
         }
         return jobList;
@@ -99,7 +97,9 @@ public class SchedulerJobServiceImpl implements SchedulerJobService {
      */
     public void pauseJob(String jobName, String jobGroup) throws SchedulerException{
         JobKey jobKey = JobKey.jobKey(jobName,jobGroup);
-
+        ScheduleJob scheduleJob = scheduleJobInService.selectByJobNameAngJobGroup(jobName,jobGroup);
+        scheduleJob.setJobStatus("PAUSED");
+        scheduleJobInService.updateByPrimaryKey(scheduleJob);
         scheduler.pauseJob(jobKey);
     }
 
@@ -123,7 +123,23 @@ public class SchedulerJobServiceImpl implements SchedulerJobService {
      */
     public void runOneJob(String jobName, String jobGroup) throws SchedulerException{
         JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
+        ScheduleJob scheduleJob = scheduleJobInService.selectByJobNameAngJobGroup(jobName, jobGroup);
+        scheduleJob.setJobStatus("NORMAL");
+        scheduleJobInService.updateByPrimaryKey(scheduleJob);
         scheduler.triggerJob(jobKey);
+    }
+
+    /**
+     * 重启一个任务
+     * @param jobName
+     * @param jobGroup
+     * @throws SchedulerException
+     */
+    public void resumeJob(String jobName, String jobGroup) throws SchedulerException{
+        JobKey jobKey = JobKey.jobKey(jobName,jobGroup);
+        ScheduleJob scheduleJob = scheduleJobInService.selectByJobNameAngJobGroup(jobName,jobGroup);
+        scheduleJob.setJobStatus("PAUSED");
+        scheduler.resumeJob(jobKey);
     }
 
 
@@ -140,6 +156,13 @@ public class SchedulerJobServiceImpl implements SchedulerJobService {
 //        if (cronTrigger!=null){
 //            throw new Exception("job is already exist!");
 //        }
+        scheduleJob.setJobStatus("NORMAL");
+        int id = scheduleJobInService.insertSelective(scheduleJob);
+        logger.info("[SchedulerJobServiceImpl] the Primary key is:{}",scheduleJob.getId());
+
+        scheduleJob.setJobId(scheduleJob.getId()+"");
+        logger.info("[SchedulerJobServiceImpl] the scheduleJob is:{}",scheduleJob);
+        scheduleJobInService.updateByPrimaryKey(scheduleJob);
         JobDetail jobDetail = JobBuilder.newJob(QuartzJobFactory.class).withIdentity(scheduleJob.getJobName(),scheduleJob.getJobGroup())
                 .build();
         jobDetail.getJobDataMap().put("scheduleJob",scheduleJob);
@@ -147,7 +170,7 @@ public class SchedulerJobServiceImpl implements SchedulerJobService {
         CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity(scheduleJob.getJobName(),scheduleJob.getJobGroup())
                 .withSchedule(cronScheduleBuilder).build();
         scheduler.scheduleJob(jobDetail,cronTrigger);
-        scheduleJobInService.insertSelective(scheduleJob);
+
     }
 
     /**
@@ -197,7 +220,8 @@ public class SchedulerJobServiceImpl implements SchedulerJobService {
 
 
 
-    private void getScheduleJob(ScheduleJob scheduleJob, Scheduler scheduler, JobKey jobKey, Trigger trigger){
+    private ScheduleJob getScheduleJob(Scheduler schedule, JobKey jobKey, Trigger trigger){
+        ScheduleJob scheduleJob = new ScheduleJob();
         try {
             JobDetail jobDetail = scheduler.getJobDetail(jobKey);
             scheduleJob = (ScheduleJob)jobDetail.getJobDataMap().get("scheduleJob");
@@ -213,6 +237,7 @@ public class SchedulerJobServiceImpl implements SchedulerJobService {
         } catch (Exception e) {
             logger.error("[SchedulerJobServiceImpl] method getScheduleJob get JobDetail error:{}",e);
         }
+        return scheduleJob;
     }
 
 }

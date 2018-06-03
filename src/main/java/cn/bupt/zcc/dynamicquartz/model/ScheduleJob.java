@@ -1,6 +1,9 @@
 package cn.bupt.zcc.dynamicquartz.model;
 
-public class ScheduleJob {
+import java.io.Serializable;
+
+public class ScheduleJob implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Integer id;
 
     private String jobId;
@@ -13,7 +16,7 @@ public class ScheduleJob {
 
     private String cronExpression;
 
-    private String desc;
+    private String description;
 
     private String beanName;
 
@@ -67,12 +70,12 @@ public class ScheduleJob {
         this.cronExpression = cronExpression;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getBeanName() {
@@ -89,5 +92,20 @@ public class ScheduleJob {
 
     public void setMethodName(String methodName) {
         this.methodName = methodName;
+    }
+
+    @Override
+    public String toString() {
+        return "ScheduleJob{" +
+                "id=" + id +
+                ", jobId='" + jobId + '\'' +
+                ", jobName='" + jobName + '\'' +
+                ", jobStatus='" + jobStatus + '\'' +
+                ", jobGroup='" + jobGroup + '\'' +
+                ", cronExpression='" + cronExpression + '\'' +
+                ", description='" + description + '\'' +
+                ", beanName='" + beanName + '\'' +
+                ", methodName='" + methodName + '\'' +
+                '}';
     }
 }

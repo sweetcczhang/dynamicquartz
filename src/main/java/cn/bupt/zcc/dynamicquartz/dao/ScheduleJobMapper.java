@@ -4,9 +4,7 @@ import cn.bupt.zcc.dynamicquartz.model.ScheduleJob;
 import cn.bupt.zcc.dynamicquartz.model.ScheduleJobExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface ScheduleJobMapper {
     int countByExample(ScheduleJobExample example);
 
@@ -14,9 +12,9 @@ public interface ScheduleJobMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(ScheduleJob record);
+    Integer insert(ScheduleJob record);
 
-    int insertSelective(ScheduleJob record);
+    Integer insertSelective(ScheduleJob record);
 
     List<ScheduleJob> selectByExample(ScheduleJobExample example);
 

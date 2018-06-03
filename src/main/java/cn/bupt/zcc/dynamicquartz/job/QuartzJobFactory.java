@@ -9,8 +9,8 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Service;
 
 /**
- * @program: dynamicquartz
- * @description: ${description}
+ *
+ *
  * @author: Zhang Chengcheng
  * @create: 2018-05-31 14:38
  **/
@@ -23,7 +23,12 @@ public class QuartzJobFactory extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         ScheduleJob object = (ScheduleJob) jobExecutionContext.getMergedJobDataMap().get("scheduleJob");
-        quartzService.executeTask(object.getBeanName(),object.getMethodName());
+        if(object.getMethodName()==null || object.getMethodName().equals("")){
+            quartzService.executeTask(object.getBeanName());
+        }else {
+            quartzService.executeTask(object.getBeanName(),object.getMethodName());
+        }
+
 
     }
 }
