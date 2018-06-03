@@ -10,6 +10,8 @@ typora-root-url: pictures
 
 使用IDEA打开该项目，并把application.properties中数据信息修改为自己的数据信息即可。同时把sql文件夹下的sql文件导入到数据中即可。项目地址：[http://localhost:8080/](http://localhost:8080/)
 
+项目地址Github地址：[Quartz动态任务调度系统](https://github.com/sweetcczhang/dynamicquartz)
+
 项目如下图所示：
 
 ![3](https://github.com/sweetcczhang/dynamicquartz/blob/master/pictures/3.png)
