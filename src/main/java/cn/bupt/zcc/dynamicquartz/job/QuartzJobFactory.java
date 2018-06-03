@@ -28,7 +28,5 @@ public class QuartzJobFactory extends QuartzJobBean {
         }else {
             quartzService.executeTask(object.getBeanName(),object.getMethodName());
         }
-
-
     }
 }

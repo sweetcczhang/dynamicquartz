@@ -153,9 +153,6 @@ public class SchedulerJobServiceImpl implements SchedulerJobService {
         if (StringUtils.isBlank(scheduleJob.getCronExpression())){
             throw new Exception("[SchedulerJobServiceImpl] CronExpression不能为空");
         }
-//        if (cronTrigger!=null){
-//            throw new Exception("job is already exist!");
-//        }
         scheduleJob.setJobStatus("NORMAL");
         int id = scheduleJobInService.insertSelective(scheduleJob);
         logger.info("[SchedulerJobServiceImpl] the Primary key is:{}",scheduleJob.getId());

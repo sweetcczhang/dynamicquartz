@@ -18,8 +18,6 @@ public class ApplicationContextUtil implements ApplicationContextAware {
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         ApplicationContextUtil.applicationContext = applicationContext;
     }
-
-
     public ApplicationContext getApplicationContext(){
         checkApplicationContext();
         return applicationContext;
@@ -30,7 +28,6 @@ public class ApplicationContextUtil implements ApplicationContextAware {
             throw new IllegalStateException("applicationContext 未注入,请在applicationContext.xml中定义SpringContextUtil");
         }
     }
-
     /**
      *根据bean的名称去寻找一个类的实例
      * @param name
@@ -63,5 +60,4 @@ public class ApplicationContextUtil implements ApplicationContextAware {
     public static <T> T getBean(String name,Class<T> clazz){
         return (T) applicationContext.getBean(name,clazz);
     }
-
 }
