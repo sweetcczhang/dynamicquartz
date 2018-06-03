@@ -12,7 +12,7 @@ typora-root-url: pictures
 
 项目如下图所示：
 
-![3](/3.png)
+![3](https://github.com/sweetcczhang/dynamicquartz/blob/master/pictures/3.png)
 
 ## Quartz
 
@@ -25,9 +25,9 @@ quartz是一个java编写的开源任务调度框架其主要调度元素有：
 
 对象之间的关系图如图下图所示：
 
-![1](/1.png)
+![1](https://github.com/sweetcczhang/dynamicquartz/blob/master/pictures/1.png)
 
-![2](/2.png)
+![2](https://github.com/sweetcczhang/dynamicquartz/blob/master/pictures/2.png)
 
 ## Spring boot2集成quartz
 
@@ -238,13 +238,13 @@ quartz是一个java编写的开源任务调度框架其主要调度元素有：
 
 8. 我们使用web的界面来实现任务的动态的添加。使用的是thymeleaf引擎。
 
-   ![3](/3.png)
+   ![3](https://github.com/sweetcczhang/dynamicquartz/blob/master/pictures/3.png)
 
 
 
 参考：
 
-[1]: https://github.com/jiwenxing/springboot-quartz	"springboot-quartz"
-[2]: https://www.jianshu.com/p/5995937f27bc	"Quartz教程"
-[3]: https://blog.csdn.net/u012907049/article/details/73801122	"Spring Boot集成持久化Quartz定时任务管理和界面展示"
+https://github.com/jiwenxing/springboot-quartz	"springboot-quartz"
+https://www.jianshu.com/p/5995937f27bc	"Quartz教程"
+https://blog.csdn.net/u012907049/article/details/73801122	"Spring Boot集成持久化Quartz定时任务管理和界面展示"
 
