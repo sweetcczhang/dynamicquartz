@@ -8,7 +8,9 @@ typora-root-url: pictures
 
 ## 项目使用方法:
 
-使用IDEA打开该项目，并把application.properties中数据信息修改为自己的数据信息即可。同时把sql文件夹下的sql文件导入到数据中即可。项目地址：[http://localhost:8080/](http://localhost:8080/)
+使用IDEA打开该项目，并把application.properties中数据信息修改为自己的数据信息即可。同时把dynamicquartz的sql文件导入到数据中即可。项目地址：[http://localhost:8080/](http://localhost:8080/)
+
+
 
 项目如下图所示：
 
